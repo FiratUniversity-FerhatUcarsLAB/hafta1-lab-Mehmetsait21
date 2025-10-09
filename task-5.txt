@@ -1,4 +1,99 @@
-Öğrenci No:
-AD-SOYAD:
+Öğrenci No:250541074
+AD-SOYAD:Mehmet Sait Tayşi
 
 Lütfen seçtiğiniz algoritmaya ait çözümü ve diğer isterleri aşağıya ekleyiniz:
+
+
+Sosyal Medyada Viral Olma Stratejisi
+
+BAŞLA
+
+  PROCEDURE Stratejiyi_Guncelle(son_performans, ogrenimler)
+    // Bu prosedür, başarısız denemelerden öğrenerek stratejiyi optimize eder.
+    EĞER son_performans.izlenme_suresi < DÜŞÜK_ESIK ISE
+      ogrenimler.ekle("Girişler daha dinamik olmalı.")
+    EĞER_BİTİR
+    EĞER son_performans.paylasim_orani > YÜKSEK_ESIK ISE
+      en_basarili_format = son_performans.format
+      ogrenimler.ekle("Paylaşmaya teşvik eden formatlar işe yarıyor.")
+    EĞER_BİTİR
+    EĞER son_performans.etkilesim_orani < DÜŞÜK_ESIK ISE
+      kacinilmasi_gereken_konular.Ekle(son_performans.konu)
+      ogrenimler.ekle(son_performans.konu + " konusu ilgi çekmiyor.")
+    EĞER_BİTİR
+    DÖNDÜR ogrenimler
+  END PROCEDURE
+
+
+  // --- ANA STRATEJİ DÖNGÜSÜ ---
+  // Tekrar Eden İşlem: Viral hedefe ulaşana veya maksimum deneme sayısına gelene kadar devam et.
+  SÜRECE viral_hedefe_ulasildi_mi == HAYIR VE deneme_sayisi < MAX_DENEME_SAYISI YAP
+    
+    deneme_sayisi = deneme_sayisi + 1
+    KONSOLA_YAZ("---------------------------------")
+    KONSOLA_YAZ("Deneme #" + deneme_sayisi + ": Strateji uygulanıyor...")
+
+    // --- FAZ 1: PLANLAMA ve ARAŞTIRMA ---
+    DEĞİŞKEN guncel_trendler = Trend_Arastirmasi_Yap(platform)
+    DEĞİŞKEN kullanilacak_ses = guncel_trendler.populer_sesler[0]
+    DEĞİŞKEN kullanilacak_format = guncel_trendler.populer_formatlar[0]
+
+    // Koşullu Durum: Daha önceki başarılı bir formattan öğrenildi mi?
+    EĞER en_basarili_format != BOS ISE
+      kullanilacak_format = en_basarili_format // Başarılı olanı tekrar kullan
+      KONSOLA_YAZ("Öğrenim uygulandı: Başarılı format tekrar kullanılıyor.")
+    EĞER_BİTİR
+
+    DEĞİŞKEN icerik_fikri = Icerik_Fikri_Gelistir(ana_tema, hedef_kitle, guncel_trendler)
+
+
+    // --- FAZ 2: ÜRETİM ve YAYINLAMA ---
+    DEĞİŞKEN uretilen_icerik = Icerik_Uret(icerik_fikri, kullanilacak_ses, kullanilacak_format)
+    DEĞİŞKEN yayin_id = Icerigi_Yayinla(uretilen_icerik, platform, "Etkileşimin en yoğun olduğu saatte")
+    KONSOLA_YAZ("İçerik yayınlandı. ID: " + yayin_id)
+
+
+    // --- FAZ 3: ÖLÇME ve ANALİZ (Zamana Bağlı Kontrol) ---
+    // Tekrar Eden İşlem: Belirli zaman aralıklarında performansı kontrol et
+    DEĞİŞKEN son_performans
+    HERBİR zaman_dilimi İÇİN [1, 6, 24] DÖNGÜSÜ // 1 saat, 6 saat ve 24 saat sonra kontrol
+        BEKLE(zaman_dilimi * saat)
+        DEĞİŞKEN anlik_performans = Performans_Verilerini_Cek(yayin_id)
+        KONSOLA_YAZ(zaman_dilimi + ". saat raporu: " + anlik_performans.goruntulenme + " görüntülenme, " + anlik_performans.paylasim_sayisi + " paylaşım.")
+
+        // Koşullu Durum: İlk saatte beklenenden hızlı bir artış var mı?
+        EĞER zaman_dilimi == 1 VE anlik_performans.etkilesim_orani > HIZLI_ARTIS_ESIGI ISE
+            KONSOLA_YAZ("Potansiyel viral! Etkileşim artırılıyor...")
+            Yorumlara_Hizlica_Cevap_Ver(yayin_id)
+            Icerigi_Hikayelerde_Paylas(yayin_id)
+        EĞER_BİTİR
+        son_performans = anlik_performans
+    DÖNGÜ_BİTİR
+
+
+    // --- FAZ 4: KARAR ve OPTİMİZASYON ---
+    // Koşullu Durum: İçerik viral hedefe ulaştı mı?
+    EĞER son_performans.goruntulenme >= VIRAL_HEDEF.min_goruntulenme VE son_performans.paylasim_orani >= VIRAL_HEDEF.min_paylasim_orani ISE
+      viral_hedefe_ulasildi_mi = EVET
+      KONSOLA_YAZ("BAŞARILI! İçerik viral hedefe ulaştı!")
+    DEĞİLSE
+      // Hedefe ulaşılamadı, neyin yanlış gittiğini analiz et ve stratejiyi güncelle
+      KONSOLA_YAZ("Hedefe ulaşılamadı. Strateji optimize ediliyor...")
+      DEĞİŞKEN ogrenimler = []
+      ogrenimler = Stratejiyi_Guncelle(son_performans, ogrenimler)
+      KONSOLA_YAZ("Yeni Öğrenimler: " + ogrenimler)
+    EĞER_BİTİR
+
+  SÜRECE_BİTİR
+
+
+  // --- SONUÇ ---
+  KONSOLA_YAZ("---------------------------------")
+  // Koşullu Durum: Strateji döngüsü neden sona erdi?
+  EĞER viral_hedefe_ulasildi_mi == EVET ISE
+    KONSOLA_YAZ("Strateji başarıyla sonuçlandı. Viral içerik üretildi.")
+  DEĞİLSE
+    KONSOLA_YAZ("Maksimum deneme sayısına ulaşıldı. Stratejiyi gözden geçirin.")
+  EĞER_BİTİR
+
+BİTİR
