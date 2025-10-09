@@ -1,4 +1,111 @@
-Öğrenci No:
-AD-SOYAD:
+Öğrenci No:250541074
+AD-SOYAD:Mehmet Sait Tayşi
 
 Lütfen seçtiğiniz algoritmaya ait çözümü ve diğer isterleri aşağıya ekleyiniz:
+
+Kütüphanede Kitap Arama Sistemi
+
+BAŞLA
+
+  // Tekrar Eden İşlem: Kullanıcı çıkış yapana kadar ana program döngüsü
+  SÜRECE program_calisiyor == EVET YAP
+
+    // --- FAZ 1: KULLANICI GİRDİSİNİ ALMA ---
+    
+    KONSOLA_YAZ("Kütüphane Arama Sistemine Hoş Geldiniz!")
+    KONSOLA_YAZ("Lütfen arama kriterini seçin:")
+    KONSOLA_YAZ("1: Kitap Adına Göre Ara")
+    KONSOLA_YAZ("2: Yazar Adına Göre Ara")
+    KONSOLA_YAZ("3: ISBN Numarasına Göre Ara")
+    arama_kriteri = Kullanicidan_Sayi_Al()
+
+    KONSOLA_YAZ("Lütfen aramak istediğiniz ifadeyi girin:")
+    aranan_ifade = Kullanicidan_Metin_Al()
+
+
+    // --- FAZ 2: ARAMA İŞLEMİNİ GERÇEKLEŞTİRME ---
+
+    PROCEDURE Kitap_Ara(kriter, ifade)
+      DEĞİŞKEN sonuc_listesi: DİZİ = [] // Her aramada sonuç listesini sıfırla
+
+      // Tekrar Eden İşlem: Veritabanındaki her bir kitabı kontrol et
+      HERBİR kitap İÇİN KUTUPHANE_VERITABANI DÖNGÜSÜ
+        
+        DEĞİŞKEN eslesme_bulundu: BOOLEAN = HAYIR
+
+        // Koşullu Durum: Kullanıcının seçtiği kritere göre kontrol yap
+        EĞER kriter == 1 ISE // Kitap Adına Göre Arama
+          // Kullanıcının girdiği ifadenin, kitabin başlığında geçip geçmediğini kontrol et (büyük/küçük harf duyarsız)
+          EĞER kitap.baslik.BuyukHarfeCevir().Icerir(ifade.BuyukHarfeCevir()) ISE
+            eslesme_bulundu = EVET
+          EĞER_BİTİR
+        YOKSA EĞER kriter == 2 ISE // Yazar Adına Göre Arama
+          EĞER kitap.yazar.BuyukHarfeCevir().Icerir(ifade.BuyukHarfeCevir()) ISE
+            eslesme_bulundu = EVET
+          EĞER_BİTİR
+        YOKSA EĞER kriter == 3 ISE // ISBN'ye Göre Arama
+          EĞER kitap.ISBN == ifade ISE
+            eslesme_bulundu = EVET
+          EĞER_BİTİR
+        EĞER_BİTİR
+
+        // Eğer bir eşleşme bulunduysa, kitabı sonuç listesine ekle
+        EĞER eslesme_bulundu == EVET ISE
+          sonuc_listesi.Ekle(kitap)
+        EĞER_BİTİR
+
+      DÖNGÜ_BİTİR
+
+      DÖNDÜR sonuc_listesi // Bulunan kitapların listesini ana programa döndür
+    END PROCEDURE
+
+    // Arama prosedürünü çağır ve sonuçları değişkene ata
+    bulunan_sonuclar = Kitap_Ara(arama_kriteri, aranan_ifade)
+
+
+    // --- FAZ 3: SONUÇLARI GÖSTERME ---
+
+    KONSOLA_YAZ("--- ARAMA SONUÇLARI ---")
+
+    // Koşullu Durum: Arama sonucunda kitap bulunup bulunmadığını kontrol et
+    EĞER bulunan_sonuclar.sayisi == 0 ISE
+      KONSOLA_YAZ("Aradığınız kriterlere uygun kitap bulunamadı.")
+    DEĞİLSE
+      KONSOLA_YAZ(bulunan_sonuclar.sayisi + " adet sonuç bulundu:")
+      
+      // Tekrar Eden İşlem: Bulunan her bir kitap için bilgileri yazdır
+      HERBİR bulunan_kitap İÇİN bulunan_sonuclar DÖNGÜSÜ
+        KONSOLA_YAZ("---------------------------------")
+        KONSOLA_YAZ("Başlık: " + bulunan_kitap.baslik)
+        KONSOLA_YAZ("Yazar: " + bulunan_kitap.yazar)
+        KONSOLA_YAZ("ISBN: " + bulunan_kitap.ISBN)
+
+        // Koşullu Durum: Kitabın durumuna göre ek bilgi ver
+        EĞER bulunan_kitap.durum == "Rafta" ISE
+          KONSOLA_YAZ("Durum: Rafta (Ödünç Alınabilir)")
+          KONSOLA_YAZ("Raf Numarası: " + bulunan_kitap.raf_numarasi)
+        YOKSA EĞER bulunan_kitap.durum == "Ödünç Alındı" ISE
+          KONSOLA_YAZ("Durum: Ödünç Alınmış (Şu an mevcut değil)")
+        YOKSA
+          KONSOLA_YAZ("Durum: " + bulunan_kitap.durum)
+        EĞER_BİTİR
+      DÖNGÜ_BİTİR
+      KONSOLA_YAZ("---------------------------------")
+    EĞER_BİTİR
+
+
+    // --- FAZ 4: DEVAM ET VEYA ÇIKIŞ ---
+
+    KONSOLA_YAZ("\nYeni bir arama yapmak ister misiniz? (Evet/Hayır)")
+    DEĞİŞKEN cevap = Kullanicidan_Metin_Al().BuyukHarfeCevir()
+
+    // Koşullu Durum: Kullanıcının cevabına göre ana döngüyü sonlandır
+    EĞER cevap != "EVET" VE cevap != "E" ISE
+      program_calisiyor = HAYIR
+    EĞER_BİTİR
+
+  SÜRECE_BİTİR
+
+  KONSOLA_YAZ("Sistemden çıkılıyor. İyi günler!")
+
+BİTİR
