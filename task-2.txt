@@ -1,4 +1,106 @@
-Öğrenci No:
-AD-SOYAD:
+Öğrenci No:250541074
+AD-SOYAD:Mehmet Sait Tayşi
 
 Lütfen seçtiğiniz algoritmaya ait çözümü ve diğer isterleri aşağıya ekleyiniz:
+
+Basit Kart Oyunu Stratejisi
+
+BAŞLA
+
+  // --- FAZ 1: OYNANABİLİR KARTLARI TESPİT ETME ---
+
+  PROCEDURE Oynanabilir_Kartlari_Bul(mevcut_el, yerdeki_kart)
+    
+    DEĞİŞKEN oynanabilir_kartlar_listesi: DİZİ = [] // Boş bir liste oluştur
+
+    // Tekrar Eden İşlem: Eldeki her kartı kontrol etme döngüsü
+    HERBİR kart İÇİN mevcut_el DÖNGÜSÜ
+      
+      // Koşullu Durum: Bir kartın oynanabilir olup olmadığını kontrol et
+      EĞER (kart.renk == yerdeki_kart.renk) VEYA (kart.deger > yerdeki_kart.deger) ISE
+        // Eğer koşul sağlanıyorsa, bu kart oynanabilir demektir.
+        oynanabilir_kartlar_listesi.Ekle(kart)
+      EĞER_BİTİR
+
+    DÖNGÜ_BİTİR
+
+    DÖNDÜR oynanabilir_kartlar_listesi // Bulunan oynanabilir kartların listesini döndür
+
+  END PROCEDURE
+
+
+  // --- FAZ 2: EN İYİ KARTI SEÇME STRATEJİSİ ---
+
+  PROCEDURE En_Iyi_Hamyi_Sec(oynanabilir_kartlar)
+
+    DEĞİŞKEN secilen_kart: NESNE = BOS // Başlangıçta seçilen kart yok
+
+    // Koşullu Durum: Hiç oynanacak kart var mı?
+    EĞER oynanabilir_kartlar.sayisi > 0 ISE
+      // Strateji: Oynanabilecek kartlar arasından en YÜKSEK değerli olanı oyna.
+      // Amaç: Yüksek kartlar ileride elde kalıp sorun yaratabilir. Onlardan erkenden kurtul.
+      DEĞİŞKEN en_yuksek_degerli_kart = oynanabilir_kartlar[0]
+      
+      // Tekrar Eden İşlem: En yüksek kartı bulma döngüsü
+      HERBİR kart İÇİN oynanabilir_kartlar DÖNGÜSÜ
+        EĞER kart.deger > en_yuksek_degerli_kart.deger ISE
+          en_yuksek_degerli_kart = kart
+        EĞER_BİTİR
+      DÖNGÜ_BİTİR
+
+      secilen_kart = en_yuksek_degerli_kart
+      KONSOLA_YAZ: "Strateji kararı: Riskli yüksek kart olan " + secilen_kart + " oynanıyor."
+
+    DEĞİLSE
+      // Oynanacak kart yoksa, 'BOS' değeri korunur.
+      KONSOLA_YAZ: "Strateji kararı: Oynanacak uygun kart bulunamadı."
+    EĞER_BİTİR
+
+    DÖNDÜR secilen_kart // Seçilen kartı veya 'BOS' değerini döndür
+
+  END PROCEDURE
+
+
+  // --- FAZ 3: ANA OYUN AKIŞI ---
+
+  PROCEDURE Tur_Oyna()
+
+    KONSOLA_YAZ: "Sıra sende. Yerdeki kart: " + oyun_yigini_ust_kart
+    KONSOLA_YAZ: "Elindeki kartlar: " + eldeki_kartlar
+
+    // Adım 1: Oynayabileceğin kartları bul
+    DEĞİŞKEN potansiyel_hamleler = Oynanabilir_Kartlari_Bul(eldeki_kartlar, oyun_yigini_ust_kart)
+
+    // Adım 2: Stratejiye göre en iyi kartı seç
+    oynanacak_kart = En_Iyi_Hamyi_Sec(potansiyel_hamleler)
+
+    // Koşullu Durum: Hamle yapılıp yapılamayacağını kontrol et
+    EĞER oynanacak_kart != BOS ISE
+      // Hamle varsa, kartı oyna
+      Karti_Oyna(oynanacak_kart)
+      Elinden_Kart_Cikar(oynanacak_kart)
+      KONSOLA_YAZ: oynanacak_kart + " oynandı. Sıra rakipte."
+    DEĞİLSE
+      // Hamle yoksa, kart çek
+      EĞER cekme_destesi_bos_mu == HAYIR ISE
+        Kart_Cek()
+        KONSOLA_YAZ: "Kart çekildi. Sıra rakipte."
+      DEĞİLSE
+        KONSOLA_YAZ: "Kart çekilemiyor (deste boş). Sıra rakipte."
+      EĞER_BİTİR
+    EĞER_BİTİR
+
+    // Koşullu Durum: Oyunu kazandın mı?
+    EĞER eldeki_kartlar.sayisi == 0 ISE
+        KONSOLA_YAZ: "TEBRİKLER! Elindeki tüm kartları bitirdin ve oyunu kazandın!"
+        Oyunu_Bitir()
+    EĞER_BİTİR
+
+  END PROCEDURE
+
+
+  // === ANA AKIŞ ===
+  // Oyuncunun sırası geldiğinde bu prosedür çağrılır.
+  Tur_Oyna()
+
+BİTİR
