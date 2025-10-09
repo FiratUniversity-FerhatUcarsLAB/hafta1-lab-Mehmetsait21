@@ -1,4 +1,79 @@
-Öğrenci No:
-AD-SOYAD:
+Öğrenci No:250541074
+AD-SOYAD:Mehmet Sait Tayşi
 
 Lütfen seçtiğiniz algoritmaya ait çözümü ve diğer isterleri aşağıya ekleyiniz:
+
+Lego İle Belirli Şekil Yapma Planı
+
+BAŞLA
+
+  PROCEDURE Envanterden_Parca_Bul(gereken_parca)
+    DEĞİŞKEN bulunan_parca: LegoParcasi = BOS // Başlangıçta boş
+
+    // Tekrar Eden İşlem: Envanterdeki her parçayı kontrol et
+    HERBİR mevcut_parca İÇİN ENVANTER DÖNGÜSÜ
+      // Koşullu Durum: Aranan parça envanterde var mı?
+      EĞER mevcut_parca.tip == gereken_parca.tip VE mevcut_parca.renk == gereken_parca.renk ISE
+        bulunan_parca = mevcut_parca
+        ENVANTER.Cikar(mevcut_parca) // Bulunan parçayı envanterden çıkar
+        DÖNGÜYÜ_KIR // Parçayı bulduğumuz için aramayı sonlandır
+      EĞER_BİTİR
+    DÖNGÜ_BİTİR
+
+    DÖNDÜR bulunan_parca // Bulunan parçayı veya BOS değeri döndür
+  END PROCEDURE
+
+
+  // --- ANA İNŞAAT AKIŞI ---
+
+  KONSOLA_YAZ("Lego Ev İnşaatı Başlatılıyor...")
+
+  // Tekrar Eden İşlem: Yapım planındaki her adımı sırayla uygula
+  HERBİR adim İÇİN YAPIM_PLANI DÖNGÜSÜ
+    KONSOLA_YAZ("---------------------------------")
+    KONSOLA_YAZ("Uygulanan Adım: " + adim.adim_numarasi)
+    KONSOLA_YAZ("Gereken Parça: " + adim.parca_gereksinimi.renk + " " + adim.parca_gereksinimi.tip)
+
+    // Adım için gereken parçayı envanterde ara
+    DEĞİŞKEN parca = Envanterden_Parca_Bul(adim.parca_gereksinimi)
+
+    // Koşullu Durum: Gerekli parça bulundu mu?
+    EĞER parca != BOS ISE
+      // Parça bulundu, modele ekle
+      insaa_edilen_model.Ekle(parca, adim.yerlestirme_koordinati)
+      KONSOLA_YAZ("Başarılı: Parça bulundu ve '" + adim.yerlestirme_koordinati + "' konumuna eklendi.")
+
+      // Koşullu Durum: Duvar örme gibi tekrar eden bir işlem mi?
+      // Örnek: Duvarın 4 sıra yüksekliğinde olması gerekiyorsa
+      EĞER adim.aciklama.Icerir("Duvarın ilk sırası") ISE
+         DEĞİŞKEN sira_sayisi = 1
+         // Tekrar Eden İşlem: Duvarı yükseltme döngüsü
+         SÜRECE sira_sayisi < 4 YAP
+           sira_sayisi = sira_sayisi + 1
+           KONSOLA_YAZ("Duvarın " + sira_sayisi + ". sırası örülüyor...")
+           // (Burada duvarın sonraki sıraları için de parça bulma ve ekleme mantığı çalıştırılır)
+         SÜRECE_BİTİR
+      EĞER_BİTİR
+
+    DEĞİLSE
+      // Parça bulunamadı, inşaatı durdur
+      KONSOLA_YAZ("HATA: Gereken parça envanterde bulunamadı!")
+      KONSOLA_YAZ("İnşaat " + adim.adim_numarasi + ". adımda durduruldu.")
+      insaat_basarili_mi = HAYIR
+      DÖNGÜYÜ_KIR // Ana inşaat döngüsünden çık
+    EĞER_BİTİR
+
+  DÖNGÜ_BİTİR
+
+
+  // --- SONUÇ ---
+
+  KONSOLA_YAZ("---------------------------------")
+  // Koşullu Durum: İnşaatın genel durumunu kontrol et
+  EĞER insaat_basarili_mi == EVET ISE
+    KONSOLA_YAZ("Tebrikler! Lego ev başarıyla tamamlandı.")
+  DEĞİLSE
+    KONSOLA_YAZ("İnşaat yarım kaldı. Lütfen eksik parçaları tamamlayın.")
+  EĞER_BİTİR
+
+BİTİR
