@@ -1,4 +1,120 @@
-Öğrenci No:
-AD-SOYAD:
+Öğrenci No:250541074
+AD-SOYAD:Mehmet Sait Tayşi
 
 Lütfen seçtiğiniz algoritmaya ait çözümü ve diğer isterleri aşağıya ekleyiniz:
+
+Mükemmel Omlet Yapma Algortiması
+
+BAŞLA
+
+  // --- FAZ 1: HAZIRLIK SÜRECİ ---
+
+  PROCEDURE Hazirlik_Yap()
+    // Yumurtaları kırma ve çırpma
+    Yumurtalari_Kaseye_Kir(kase, yumurta_sayisi)
+    Tuz_ve_Karabiber_Ekle()
+
+    // Koşullu Durum: Sıvı eklenecek mi?
+    EĞER sivi_eklenecek_mi == EVET ISE
+      Sivi_Ekle(sivi_turu, sivi_miktari_ml)
+      KONSOLA_YAZ: sivi_turu + " eklendi. Omlet daha kabarık olacak."
+    DEĞİLSE
+      KONSOLA_YAZ: "Sıvı eklenmedi. Omlet daha yoğun kıvamlı olacak."
+    EĞER_BİTİR
+
+    // Tekrar Eden İşlem: Çırpma döngüsü
+    DEĞİŞKEN karisim_puruzsuz_mu = HAYIR
+    SÜRECE karisim_puruzsuz_mu == HAYIR YAP
+      Cirpici_ile_Cirp(kase, 30 saniye)
+      // Karışımın rengi açılıp homojen hale gelince döngüden çık
+      EĞER Karisim_Rengi_Acik_ve_Homojen_Ise()
+        karisim_puruzsuz_mu = EVET
+      EĞER_BİTİR
+    SÜRECE_BİTİR
+    KONSOLA_YAZ: "Yumurta karışımı hazır."
+
+    // Koşullu Durum ve Döngü: İç malzemelerin hazırlanması
+    EĞER ic_malzeme_kullanilacak_mi == EVET ISE
+      KONSOLA_YAZ: "İç malzemeler hazırlanıyor..."
+      // Tekrar Eden İşlem: Her bir malzeme için kontrol
+      HERBİR malzeme İÇİN ic_malzemeler_listesi DÖNGÜSÜ
+        EĞER malzeme.on_pisirme_gerekli == EVET ISE
+          Malzemeyi_Sotele(malzeme.isim) // Örn: Mantar ve soğan sotelenir
+          KONSOLA_YAZ: malzeme.isim + " sotelendi."
+        DEĞİLSE
+          Malzemeyi_Hazir_Et(malzeme.isim) // Örn: Peynir rendelenir
+          KONSOLA_YAZ: malzeme.isim + " hazırlandı."
+        EĞER_BİTİR
+      DÖNGÜ_BİTİR
+    EĞER_BİTİR
+  END PROCEDURE
+
+
+  // --- FAZ 2: PİŞİRME SÜRECİ ---
+
+  PROCEDURE Omleti_Pisir()
+    Tavayi_Orta_Ateste_Isit()
+    Yag_Ekle("tereyağı" veya "zeytinyağı")
+
+    // Koşullu Durum: Yağın hazır olup olmadığını kontrol etme
+    BEKLE(60 saniye) // Yağın ısınması için bekle
+    EĞER Yag_Kopurmesi_Durdu_veya_Hafifce_Parladi_Ise()
+      Yumurta_Karisimini_Tavaya_Dok()
+    DEĞİLSE
+      UYARI_VER: "Tava yeterince ısınmadı, omlet yapışabilir."
+      BAŞA_DÖN // Yağın ısınmasını tekrar bekle
+    EĞER_BİTİR
+
+    DEĞİŞKEN pisirme_suresi_saniye = 0
+    DEĞİŞKEN merkez_sivi_mi = EVET
+
+    // Tekrar Eden İşlem: Pişirme döngüsü
+    SÜRECE merkez_sivi_mi == EVET YAP
+      BEKLE(15 saniye)
+      pisirme_suresi_saniye = pisirme_suresi_saniye + 15
+      Spatula_ile_Kenarlari_Merkeze_Cek() // Pişen kısımları ortaya it
+      Pismemis_Yumurtanin_Kenarlara_Akmasini_Sagla()
+
+      // Koşullu Durum: İstenen kıvama göre döngüyü sonlandırma
+      EĞER omlet_kivami == "akışkan" VE pisirme_suresi_saniye > 60 ISE
+        merkez_sivi_mi = HAYIR // Üstü hala ıslakken döngüyü bitir
+      YOKSA EĞER omlet_kivami == "hafif nemli" VE pisirme_suresi_saniye > 90 ISE
+        merkez_sivi_mi = HAYIR // Üstü hafif nemliyken döngüyü bitir
+      YOKSA EĞER omlet_kivami == "tam pişmiş" VE Omletin_Ustu_Katilasti_Ise()
+        merkez_sivi_mi = HAYIR // Üstü tamamen pişince döngüyü bitir
+      EĞER_BİTİR
+    SÜRECE_BİTİR
+    KONSOLA_YAZ: "Omletin tabanı pişti. Pişirme süresi: " + pisirme_suresi_saniye + " saniye."
+
+    // Koşullu Durum: İç malzemeleri ekleme
+    EĞER ic_malzeme_kullanilacak_mi == EVET ISE
+      Hazirlanan_Malzemeleri_Omletin_Yarisina_Ekle()
+      BEKLE(30 saniye) // Peynirin erimesi için bekleme süresi
+    EĞER_BİTİR
+
+  END PROCEDURE
+
+
+  // --- FAZ 3: TAMAMLAMA VE SERVİS ---
+
+  PROCEDURE Servis_Et()
+    Spatula_ile_Omletin_Bos_Yarisini_Dolu_Yarisinin_Uzerine_Katla()
+    KONSOLA_YAZ: "Omlet katlandı."
+    BEKLE(15 saniye)
+    Omleti_Servis_Tabagina_Kaydir()
+
+    // Opsiyonel son dokunuş
+    EĞER ic_malzemeler_listesi İÇERİR "taze otlar" ISE
+      Uzerine_Taze_Ot_Serp()
+    EĞER_BİTİR
+
+    KONSOLA_YAZ: "Mükemmel omlet servise hazır. Afiyet olsun!"
+  END PROCEDURE
+
+
+  // === ANA AKIŞ ===
+  Hazirlik_Yap()
+  Omleti_Pisir()
+  Servis_Et()
+
+BİTİR
